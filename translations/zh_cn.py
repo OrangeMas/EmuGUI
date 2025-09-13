@@ -87,6 +87,9 @@ def translateMainZH_CN(window):
     window.label_14.setText("项目由 Tech-FZ. 提供") # Banner made by (insert author of current banner here).
 
     window.label_21.setText("EmuGUI 的媒体平台(英语)") # EmuGUI on social media (in English)
+    window.label_20.setText("主题") # Themes
+    window.comboBox_4.setItemText(0, "系统默认") # System default
+    window.comboBox_5.setItemText(0, "系统默认") # System default
 
 def translateNewVmZH_CN(window):
     window.setWindowTitle("EmuGUI - 创建新的虚拟机") # EmuGUI - Create new VM
@@ -524,4 +527,5 @@ def translateErrDialogZH_CN(window, errcode):
         "如果此错误多次发生，请联系您的管理员或在 EmuGUI Discord 服务器或其 GitHub 存储库上寻求帮助。"
         ) # If this error occurs multiple times, contact your administrator and/or ask for help on the EmuGUI Discord Server or on its GitHub repository.
     
+
     window.pushButton.setText("确定") # OK
