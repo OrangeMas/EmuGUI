@@ -114,6 +114,7 @@ class Ui_MainWindow(object):
         self.comboBox_4.addItem("")
         self.comboBox_4.addItem("")
         self.comboBox_4.addItem("")
+        self.comboBox_4.addItem("")
         self.comboBox_4.setObjectName(u"comboBox_4")
 
         self.gridLayout_7.addWidget(self.comboBox_4, 0, 1, 1, 1)
@@ -580,6 +581,7 @@ class Ui_MainWindow(object):
         self.comboBox_4.setItemText(10, QCoreApplication.translate("MainWindow", u"Portugu\u00eas", None))
         self.comboBox_4.setItemText(11, QCoreApplication.translate("MainWindow", u"Italiano", None))
         self.comboBox_4.setItemText(12, QCoreApplication.translate("MainWindow", u"Polski", None))
+        self.comboBox_4.setItemText(13, QCoreApplication.translate("MainWindow", u"简体中文", None))
 
         self.pushButton_15.setText(QCoreApplication.translate("MainWindow", u"Apply", None))
         self.label_15.setText(QCoreApplication.translate("MainWindow", u"Language", None))

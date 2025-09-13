@@ -70,6 +70,7 @@ try:
     import translations.pt
     import translations.it
     import translations.pl
+    import translations.zh_cn
     import locale
 
 except:
@@ -415,6 +416,12 @@ class Window(QMainWindow, Ui_MainWindow):
             if langmode != "system":
                 self.languageInUse = "pl"
 
+        elif languageToUse.startswith("zh_CN"):
+            translations.zh_cn.translateMainZH_CN(self)
+
+            if langmode != "system":
+                self.languageInUse = "zh_CN"
+
         else:
             translations.en.translateMainEN(self)
 
@@ -612,6 +619,7 @@ class Window(QMainWindow, Ui_MainWindow):
         # pt: Portuguese
         # it: Italian
         # pl: Polish
+        # zh_CN: Simplified Chinese
         insert_language = """
         INSERT INTO settings (
             name, value
@@ -934,6 +942,16 @@ class Window(QMainWindow, Ui_MainWindow):
                         i += 1
 
                     langmode = "be"
+
+                elif result[0][1] == "zh_CN":
+                    while i < self.comboBox_4.count():
+                        if self.comboBox_4.itemText(i) == "简体中文":
+                            self.comboBox_4.setCurrentIndex(i)
+                            break
+
+                        i += 1
+
+                    langmode = "zh_CN"
 
                 if platform.system() == "Windows":
                     langfile = platformSpecific.windowsSpecific.windowsLanguageFile()
@@ -2664,6 +2682,12 @@ class Window(QMainWindow, Ui_MainWindow):
         WHERE name = 'lang';
         """
 
+        language_zh_CN = f"""
+        UPDATE settings
+        SET value = 'zh_CN'
+        WHERE name = 'lang';
+        """
+
         theme_default = f"""
         UPDATE settings
         SET value = 'default'
@@ -3525,6 +3549,76 @@ class Window(QMainWindow, Ui_MainWindow):
 
             try:
                 cursor.execute(language_uk)
+                connection.commit()
+
+                if platform.system() == "Windows":
+                    langfile = platformSpecific.windowsSpecific.windowsLanguageFile()
+                
+                else:
+                    langfile = platformSpecific.unixSpecific.unixLanguageFile()
+
+                if langmode == "system":
+                    languageToUseLater = locale.getlocale()[0]
+                    languageToUseEvenLater = languageToUseLater.split("_")
+                    languageToUseHere = languageToUseEvenLater[0]
+
+                else:
+                    languageToUseHere = langmode
+                
+                try:
+                    with open(langfile, "w+") as language:
+                        language.write(languageToUseHere)
+
+                except:
+                    print("EmuGUI failed to create a language file. Expect some issues.")
+
+                    if platform.system() == "Windows":
+                        errorFile = platformSpecific.windowsSpecific.windowsErrorFile()
+        
+                    else:
+                        errorFile = platformSpecific.unixSpecific.unixErrorFile()
+
+                    with open(errorFile, "w+") as errCodeFile:
+                        errCodeFile.write(errors.errCodes.errCodes[54])
+
+                    logman.writeToLogFile(
+                        f"{errors.errCodes.errCodes[54]}: Could not create the language file. Expect issues."
+                    )
+
+                    dialog = ErrDialog(self)
+                    dialog.exec()
+
+                self.setLanguage(langmode)
+                print("The query was executed successfully.")
+
+            except sqlite3.Error as e:
+                print(f"The SQLite module encountered an error: {e}.")
+
+                if platform.system() == "Windows":
+                    errorFile = platformSpecific.windowsSpecific.windowsErrorFile()
+        
+                else:
+                    errorFile = platformSpecific.unixSpecific.unixErrorFile()
+
+                with open(errorFile, "w+") as errCodeFile:
+                    errCodeFile.write(errors.errCodes.errCodes[12])
+
+                logman.writeToLogFile(
+                    f"{errors.errCodes.errCodes[12]}: The database could not be accessed and the settings are therefore not applied. SQLite describes the error as follows: \"{e}\""
+                    )
+
+                dialog = ErrDialog(self)
+                dialog.exec()
+
+            except:
+                dialog = SettingsRequireEmuGUIReboot(self)
+                dialog.exec()
+
+        elif self.comboBox_4.currentText() == "简体中文":
+            langmode = "zh_CN"
+
+            try:
+                cursor.execute(language_zh_CN)
                 connection.commit()
 
                 if platform.system() == "Windows":

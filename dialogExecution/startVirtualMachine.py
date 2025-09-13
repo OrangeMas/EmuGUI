@@ -28,6 +28,7 @@ import translations.ru
 import translations.pt
 import translations.it
 import translations.pl
+import translations.zh_cn
 import locale
 import errors.errCodes
 from dialogExecution.errDialog import ErrDialog
@@ -168,6 +169,9 @@ class StartVirtualMachineDialog(QDialog, Ui_Dialog):
                 elif result[0][1] == "it":
                     langmode = "it"
 
+                elif result[0][1] == "zh_CN":
+                    langmode = "zh_CN"
+
                 elif result[0][1] == "system":
                     langmode = "system"
 
@@ -223,6 +227,9 @@ class StartVirtualMachineDialog(QDialog, Ui_Dialog):
             elif languageToUse.startswith("it"):
                 translations.it.translateStartVmIT(self, self.vmSpecs[0])
 
+            elif languageToUse.startswith("zh_CN"):
+                translations.zh_cn.translateStartVmZH_CN(self, self.vmSpecs[0])
+
             else:
                 translations.en.translateStartVmEN(self, self.vmSpecs[0])
         
@@ -271,6 +278,9 @@ class StartVirtualMachineDialog(QDialog, Ui_Dialog):
 
                     elif languageToUse.startswith("it"):
                         translations.it.translateStartVmIT(self, self.vmSpecs[0])
+
+                    elif languageToUse.startswith("zh_CN"):
+                        translations.zh_cn.translateStartVmZH_CN(self, self.vmSpecs[0])
 
                     else:
                         translations.en.translateStartVmEN(self, self.vmSpecs[0])
